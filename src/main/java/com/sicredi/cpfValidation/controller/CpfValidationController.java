@@ -1,5 +1,6 @@
 package com.sicredi.cpfValidation.controller;
 
+import com.sicredi.cpfValidation.model.CPFResponseModel;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +12,7 @@ import java.util.InputMismatchException;
 public class CpfValidationController {
 
     @GetMapping("/cpf/{cpf}")
-    public static String iscpf(@PathVariable String cpf) {
+    public static CPFResponseModel iscpf(@PathVariable String cpf) {
         // considera-se erro cpf's formados por uma sequencia de numeros iguais
         if (cpf.equals("00000000000") || cpf.equals("11111111111") ||
                 cpf.equals("22222222222") || cpf.equals("33333333333") ||
@@ -19,7 +20,7 @@ public class CpfValidationController {
                 cpf.equals("66666666666") || cpf.equals("77777777777") ||
                 cpf.equals("88888888888") || cpf.equals("99999999999") ||
                 (cpf.length() != 11)) {
-            return("unable_to_vote");
+            return new CPFResponseModel("UNABLE_TO_VOTE");
         }
 
         char dig10, dig11;
@@ -64,12 +65,12 @@ public class CpfValidationController {
 
             // Verifica se os digitos calculados conferem com os digitos informados.
             if ((dig10 == cpf.charAt(9)) && (dig11 == cpf.charAt(10))) {
-                return("able_to_vote");
+                return new CPFResponseModel("ABLE_TO_VOTE");
             } else {
-                return("unable_to_vote");
+                return new CPFResponseModel("UNABLE_TO_VOTE");
             }
         } catch (InputMismatchException erro) {
-            return("unable_to_vote");
+            return new CPFResponseModel("UNABLE_TO_VOTE");
         }
 
     }
